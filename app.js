@@ -10,7 +10,6 @@ connect('mongodb://localhost:27017/fitrain', {useUnifiedTopology:true, useNewUrl
 
 var api = require('./api')
 var user = require('./api/users')
-// const crudApi = require('./api/crud')
 
 var app = express()
 
@@ -41,5 +40,11 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500)
   res.render('error')
 });
+
+const { initSocket } = require('./lib/socket.io')
+require('./jobs')
+// require('./lib/firebase')
+
+initSocket(app, 3005)
 
 module.exports = app
