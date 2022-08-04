@@ -43,7 +43,7 @@ app.use(function(err, req, res, next) {
 
 const { initSocket } = require('./lib/socket.io')
 require('./jobs')
-// require('./lib/firebase')
+require('./lib/firebase')
 
 initSocket(app, 3005)
 

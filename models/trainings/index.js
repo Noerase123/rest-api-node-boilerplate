@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose')
+const attachment = require('../../config/schema/attachment')
 
-const trainings = new Schema({
+const schema = new Schema({
     trainingID: {
         type: String,
         required: true
@@ -18,7 +19,7 @@ const trainings = new Schema({
         required: true
     },
     image: {
-        type: String
+        type: attachment
     },
     descriptions: {
         type: String,
@@ -33,4 +34,9 @@ const trainings = new Schema({
     }
 })
 
-module.exports = model('trainings', trainings)
+schema.pre('save', async (next) => {
+    console.log('PRE SAVE HERE TESTING!')
+    next()
+})
+
+module.exports = model('trainings', schema)

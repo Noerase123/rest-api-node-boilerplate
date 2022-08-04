@@ -3,6 +3,7 @@ const { Schema, model } = require('mongoose')
 const schema = new Schema({
     userID: {
         type: 'ObjectId',
+        ref: 'users',
         required: true
     },
     message: {

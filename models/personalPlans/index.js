@@ -3,6 +3,7 @@ const { Schema, model } = require('mongoose')
 const schema = new Schema({
     userID: {
         type: 'ObjectId',
+        ref: 'users',
         required: true
     },
     trainingType: {
@@ -11,6 +12,7 @@ const schema = new Schema({
     },
     training: {
         type: 'ObjectId',
+        ref: 'trainings',
         required: true
     },
     dates: {

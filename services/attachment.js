@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const models = require('../models')
 
 const handleError = (err, res) => {
   res
@@ -11,14 +12,25 @@ const handleError = (err, res) => {
 module.exports = {
   upload: async (req, res, next) => {
     const tempPath = req.file.path
+    const { _model, _id } = req.params
+    const { _field } = req.query
     const targetPath = path.join(__dirname, `./public/images`)
 
-    if (targetPath) {
+    const updateOps = {}
+    const setInfos = Object.assign(updateOps, {
+        [_field]: req.file
+    })
+
+    const updateResult = await models[`${_model}`].updateOne({ _id }, { $set: setInfos })
+
+    if (targetPath && updateResult) {
       fs.rename(tempPath, targetPath, err => {
         // if (err) return handleError(err, res)
 
-        res.status(200).json({
-          message: 'File uploaded successfully!'
+        res.status(201).json({
+          message: 'File uploaded successfully!',
+          updateResult,
+          file: req.file
         })
       })
     } else {
@@ -32,9 +44,11 @@ module.exports = {
     }
   },
   getFile: async (req, res, next) => {
-    const { _model, _fileName } = req.params
+    const { _model, _id } = req.params
+    const { _field } = req.query
     try {
-      res.sendFile(path.join(__dirname, `./images/${_model}/${_fileName}.png`))
+      const view = await models[`${_model}`].findById(_id)
+      res.sendFile(view[`${_field}`].path)
     } catch (error) {
       console.log(error)
       res.status(500).json(error)

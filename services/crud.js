@@ -56,7 +56,7 @@ module.exports = {
             const setInfos = Object.assign(updateOps, {
                 ...updateInfo
             })
-            const updatedResult = await models[`${_model}`].update({ _id }, { $set: setInfos })
+            const updatedResult = await models[`${_model}`].updateOne({ _id }, { $set: setInfos })
             res.status(200).json({
                 message: `Updated an entry for ${_model}`,
                 updatedResult
