@@ -20,7 +20,7 @@ module.exports = {
         } else {
           const private_key = process.env.SECRET
           const token = jwt.sign({ user: user[0] }, private_key, {
-            expiresIn: '60h'
+            expiresIn: '24h'
           })
           res.status(200).json({
             message: 'User Login successfully',
