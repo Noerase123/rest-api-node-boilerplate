@@ -43,14 +43,21 @@ module.exports = {
   },
   getFile: async (req, res, next) => {
     const { _model, _id } = req.params
-    const { _field, _download } = req.query
+    const { _field, _format } = req.query
     try {
       const view = await models[`${_model}`].findById(_id)
-      const path = view[`${_field}`].path
-      if (Boolean(_download)) {
+      const { path, mimetype } = view[_field]
+      const data = await fs.readFileSync(path)
+      const base64String = `data:${mimetype};base64,${Buffer.from(data).toString('base64')}`
+      if (_format === 'download') {
         res.download(path)
+      } else if (_format === 'base64') {
+        res.status(200).json({
+            file: base64String
+        })
+      } else {
+        res.sendFile(path)
       }
-      res.sendFile(path)
     } catch (error) {
       console.log(error)
       res.status(500).json(error)
