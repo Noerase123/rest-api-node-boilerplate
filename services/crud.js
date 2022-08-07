@@ -30,8 +30,8 @@ module.exports = {
                 query[field] = search
             }
             const all = await req.paginationProcess(models[`${_model}`].find(query))
-            const rawList = await (models[`${_model}`].find(query))
-            const response = listDataResponse(all, res, rawList)
+            const count = await models[`${_model}`].find(query).count()
+            const response = listDataResponse(all, req, res, count)
             res.status(200).json(response)
         } catch (error) {
             errorHandler(500, res, error)

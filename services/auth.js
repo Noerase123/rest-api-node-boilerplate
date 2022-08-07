@@ -20,7 +20,7 @@ module.exports = {
         } else {
           const private_key = process.env.SECRET
           const token = jwt.sign({ user: user[0] }, private_key, {
-            expiresIn: 1000 * 60 * 5
+            expiresIn: '24h'
           })
           res.status(200).json({
             message: 'User Login successfully',
@@ -66,8 +66,8 @@ module.exports = {
   listUsers: async (req, res, next) => {
     try {
       const viewAll = await req.paginationProcess(models['users'].find())
-      const rawList = await models['users'].find()
-      const response = listDataResponse(viewAll, res, rawList)
+      const count = await models['users'].find().count()
+      const response = listDataResponse(viewAll, req, res, count)
       res.status(200).json(response)
     } catch (error) {
       console.log(error)

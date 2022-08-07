@@ -67,6 +67,11 @@ module.exports = {
     const { _model, _id } = req.params
     const { _field } = req.query
     try {
+      const viewOne = await models[`${_model}`].findById(_id)
+      const { path } = viewOne[`${_field}`]
+      fs.unlink(path, err => {
+        if (err) return handleError(err, res)
+      })
       const setInfos = Object.assign({}, {
           [_field]: {}
       })

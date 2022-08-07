@@ -3,7 +3,7 @@ module.exports = async (req, res, next) => {
       page: 0,
       limit: 10,
       orderBy: '',
-      orderAsc: true
+      orderAsc: 1
     };
     if (req.query.noLimit==1) {
       paginationDetails.limit = 99999999;
