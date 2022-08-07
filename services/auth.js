@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const errorHandler = require('./errorHandler')
 const { listDataResponse, viewDataResponse } = require('../utils/dataResponse')
+const { createToken } = require('../lib/jsonwebtoken')
 
 module.exports = {
   login: async (req, res, next) => {
@@ -18,10 +19,7 @@ module.exports = {
         if (!encryptPass) {
           errorHandler(401, res, 'incorrect email or password')
         } else {
-          const private_key = process.env.SECRET
-          const token = jwt.sign({ user: user[0] }, private_key, {
-            expiresIn: '24h'
-          })
+          const token = createToken(user[0])
           res.status(200).json({
             message: 'User Login successfully',
             token

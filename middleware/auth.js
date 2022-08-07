@@ -1,12 +1,12 @@
-const jwt = require('jsonwebtoken')
 const authentications = require('../models/authentications')
 const errorHandler = require('../services/errorHandler')
+const { verifyToken } = require('../lib/jsonwebtoken')
 
 module.exports = (req, res, next) => {
   try {
     let token = req.headers.authorization.split(' ')[1]
     if (token) {
-      jwt.verify(token, process.env.SECRET, async (err, decoded) => {
+      verifyToken(token, async (err, decoded) => {
         if (err) {
           errorHandler(400, res)
         } else {
