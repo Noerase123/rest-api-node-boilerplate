@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-const models = require('../models')
+const crud = require('../lib/rest-crud')
+const errorHandler = require('./errorHandler')
 
 const handleError = (err, res) => {
   res
@@ -19,11 +20,11 @@ module.exports = {
     const setInfos = Object.assign({}, {
         [_field]: req.file
     })
-    const updateResult = await models[`${_model}`].updateOne({ _id }, { $set: setInfos })
+    const updateResult = await crud(_model).update(_id, setInfos)
 
     if (targetPath && updateResult) {
       fs.rename(tempPath, targetPath, err => {
-        // if (err) return handleError(err, res)
+        // if (err) return errorHandler(500, res, err)
 
         res.status(201).json({
           message: 'File uploaded successfully!',
@@ -33,7 +34,7 @@ module.exports = {
       })
     } else {
       fs.unlink(tempPath, err => {
-        if (err) return handleError(err, res)
+        if (err) return errorHandler(500, res, err)
 
         res.status(403)
           .contentType("text/plain")
@@ -45,7 +46,7 @@ module.exports = {
     const { _model, _id } = req.params
     const { _field, _format } = req.query
     try {
-      const view = await models[`${_model}`].findById(_id)
+      const view = await crud(_model).viewOne(_id)
       const { path, mimetype } = view[_field]
       const data = await fs.readFileSync(path)
       const base64String = `data:${mimetype};base64,${Buffer.from(data).toString('base64')}`
@@ -59,15 +60,14 @@ module.exports = {
         res.sendFile(path)
       }
     } catch (error) {
-      console.log(error)
-      res.status(500).json(error)
+      errorHandler(500, res, error)
     }
   },
   deleteFile: async (req, res, next) => {
     const { _model, _id } = req.params
     const { _field } = req.query
     try {
-      const viewOne = await models[`${_model}`].findById(_id)
+      const viewOne = await crud(_model).viewOne(_id)
       const { path } = viewOne[`${_field}`]
       fs.unlink(path, err => {
         if (err) return handleError(err, res)
@@ -75,14 +75,13 @@ module.exports = {
       const setInfos = Object.assign({}, {
           [_field]: {}
       })
-      const updated = await models[`${_model}`].updateOne({ _id }, { $set: setInfos })
+      const updated = await crud(_model).update(_id, setInfos)
       res.status(200).json({
         message: `Deleted a document from ${_id} of ${_model}`,
         updated
       })
     } catch (error) {
-      console.log(error)
-      res.status(500).json(error)
+      errorHandler(500, res, error)
     }
   }
 }

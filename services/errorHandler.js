@@ -30,8 +30,8 @@ module.exports = (status, res, error = '') => {
             error,
             status: 0
         },
-    };
-    
+    }
+
     console.log(error)
     const responseStatus = code[status]
 

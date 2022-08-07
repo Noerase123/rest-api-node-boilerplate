@@ -1,4 +1,8 @@
-const { auth, pagination, cache } = require('../middleware')
+const {
+  pagination,
+  authorizationGeneric,
+  getApiCache
+} = require('../middleware')
 const {
   create,
   viewAll,
@@ -10,12 +14,12 @@ const {
 
 module.exports = (router) => {
   router.route('/:_model')
-    .post(auth, create)
-    .get(auth, pagination, cache.getApiCache, viewAll)
-    .delete(auth, deleteAll)
+    .post(authorizationGeneric, create)
+    .get(authorizationGeneric, pagination, getApiCache, viewAll)
+    .delete(authorizationGeneric, deleteAll)
 
   router.route('/:_model/:_id')
-    .patch(auth, update)
-    .get(auth, cache.getApiCache, view)
-    .delete(auth, deleteOne)
+    .patch(authorizationGeneric, update)
+    .get(authorizationGeneric, getApiCache, view)
+    .delete(authorizationGeneric, deleteOne)
 }

@@ -6,6 +6,14 @@ module.exports = {
     }
     return ans;
   },
+  crudEntry: (val) => {
+    const response = {
+      create: 'Created',
+      update: 'Updated',
+      delete: 'Deleted'
+    }
+    return response[val]
+  },
   capitalize: (value) => {
     if (value) return `${value.charAt(0).toUpperCase()}${value.slice(1)}`
     return ''

@@ -1,4 +1,4 @@
-const { auth } = require('../middleware')
+const { authorizationGeneric } = require('../middleware')
 const { uploadMultPath } = require('../lib/multer')
 const {
   upload,
@@ -8,7 +8,7 @@ const {
 
 module.exports = (router) => {
     router.route('/document/:_model/:_id')
-      .post(auth, uploadMultPath.single("file"), upload)
-      .get(auth, getFile)
-      .delete(auth, deleteFile)
+      .post(authorizationGeneric, uploadMultPath.single("file"), upload)
+      .get(authorizationGeneric, getFile)
+      .delete(authorizationGeneric, deleteFile)
 }

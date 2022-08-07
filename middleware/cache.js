@@ -7,7 +7,7 @@ exports.setApiCache = async (key, value) => {
             EX: 10
         }) 
     } catch (error) {
-        errorHandler(500, res, error)
+        console.log(error)
     }
 }
   

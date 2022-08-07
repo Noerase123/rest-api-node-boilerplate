@@ -1,4 +1,4 @@
-const { setApiCache } = require('../middleware/cache')
+const { setApiCache } = require('../middleware')
 const { range } = require('./helpers')
 
 exports.listDataResponse = (model, req, res, count) => {
@@ -38,6 +38,5 @@ exports.viewDataResponse = (model, res) => {
     const response = {
         entry: model
     }
-    setApiCache(res.cacheKey, response)
     return response
 }
