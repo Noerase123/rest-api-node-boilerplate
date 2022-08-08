@@ -38,6 +38,10 @@ const schema = new Schema({
           }
         }
     },
+    userRole: {
+        type: [String],
+        require: true
+    },
     lastLoggedIn: {
         type: Date
     },

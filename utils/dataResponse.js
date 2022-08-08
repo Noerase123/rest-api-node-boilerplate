@@ -2,7 +2,7 @@ const { setApiCache } = require('../middleware')
 const { range } = require('./helpers')
 
 exports.listDataResponse = (model, req, res, count) => {
-    const response = {
+    let response = {
         count,
         results: model,
         pagination: null,
@@ -29,7 +29,8 @@ exports.listDataResponse = (model, req, res, count) => {
         const cacheKey = res.cacheKey
         setApiCache(cacheKey, response)
     } else {
-        response['pagination'] = false
+        delete response['pagination']
+        delete response['links']
     }
     return response
 }

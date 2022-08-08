@@ -1,10 +1,10 @@
-const { authorizationGeneric, baseRole } = require('./auth')
+const { authorizationGeneric, accessRole } = require('./auth')
 const pagination = require('./pagination')
 const { getApiCache, setApiCache } = require('./cache')
 
 module.exports = {
     authorizationGeneric,
-    baseRole,
+    accessRole,
     getApiCache,
     setApiCache,
     pagination

@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
       paginationDetails.orderAsc = req.query.orderAsc == 0 ? -1 : 1
     }
     req.pagination = paginationDetails;
-    res.pagination = paginationDetails;
+    res.pagination = req.query.isPagination === '0' ? null : paginationDetails;
     res.routePath = req.route.path + '::' + req.originalUrl;
     let cacheKey = '';
     if (req.User) {
@@ -39,10 +39,12 @@ module.exports = async (req, res, next) => {
           if (this.pagination.orderBy) {
             order[this.pagination.orderBy] = this.pagination.orderAsc
           }
-          model
-            .limit(this.pagination.limit)
-            .skip(this.pagination.limit * this.pagination.page)
-            .sort(order)
+          if (req.query.isPagination !== '0') {
+            model
+              .limit(this.pagination.limit)
+              .skip(this.pagination.limit * this.pagination.page)
+              .sort(order)
+          }
         }
       } catch (err) {
         console.log(err)

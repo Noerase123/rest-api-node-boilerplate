@@ -24,7 +24,7 @@ module.exports = {
         errorHandler(400, res)
     }
   },
-  baseRole: (role) => {
+  accessRole: (role) => {
     return (req, res, next) => {
       try {
         let token = req.headers.authorization.split(' ')[1]
