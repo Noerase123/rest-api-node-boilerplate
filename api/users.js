@@ -11,14 +11,18 @@ const {
 const {
   pagination,
   getApiCache,
-  authorizationGeneric,
   accessRole
 } = require('../middleware')
+const {
+  auth
+} = require('../lib/firebase')
 
 /* GET users listing. */
 router.post('/signup', signUp)
 
 router.post('/login', login)
+
+router.post('/sso/login', auth.signInGoogle)
 
 router.get('/users', accessRole('Admin'), pagination, getApiCache, listUsers)
 

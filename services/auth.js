@@ -21,6 +21,7 @@ module.exports = {
           const token = createToken(user[0])
           res.status(200).json({
             message: 'User Login successfully',
+            status: 1,
             token
           })
         }
