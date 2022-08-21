@@ -20,6 +20,7 @@ exports.listDataResponse = (model, req, res, count) => {
         if (count > 0) {
             response['pagination']['totalItems'] = count
             response['pagination']['scene'] = `${startFrom} - ${endTo}`
+            response['pagination']['paginate'] = Math.ceil(response['pagination']['totalItems'] / response['pagination']['limit'])
         }
         const fullUrl = `${req.protocol}://${req.get('host')}${req._parsedUrl.pathname}`
         const nextPage = response.pagination.page + 1
