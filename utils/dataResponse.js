@@ -6,11 +6,17 @@ exports.listDataResponse = ({ model, req, res, count }) => {
         count,
         results: model,
         pagination: null,
+        meta: {
+            search: '',
+            orderBy: '',
+            orderAsc: 1
+        },
         links: {
             prev: null,
             next: null
         }
     }
+
     if (res.pagination) {
         response['pagination'] = res.pagination
         response['pagination']['page'] = response['pagination']['page'] + 1
@@ -22,6 +28,9 @@ exports.listDataResponse = ({ model, req, res, count }) => {
             response['pagination']['scene'] = `${startFrom} - ${endTo}`
             response['pagination']['paginate'] = Math.ceil(response['pagination']['totalItems'] / response['pagination']['limit'])
         }
+        if (req.query.search) response['meta']['search'] = req.query.search
+        if (req.query.orderBy) response['meta']['orderBy'] = req.query.orderBy
+        if (req.query.orderAsc) response['meta']['orderAsc'] = req.query.orderAsc
         const fullUrl = `${req.protocol}://${req.get('host')}${req._parsedUrl.pathname}`
         const nextPage = response.pagination.page + 1
         const prevPage = response.pagination.page - 1
