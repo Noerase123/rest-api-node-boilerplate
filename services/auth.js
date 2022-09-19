@@ -3,6 +3,7 @@ const errorHandler = require('./errorHandler')
 const { listDataResponse, viewDataResponse } = require('../utils/dataResponse')
 const { createToken } = require('../lib/jsonwebtoken')
 const crud = require('../lib/rest-crud')
+const { verifyToken } = require('../lib/jsonwebtoken')
 
 module.exports = {
   login: async (req, res, next) => {
@@ -29,6 +30,39 @@ module.exports = {
 
     } catch (error) {
       errorHandler(500, res, error)
+    }
+  },
+  createSession: async (req, res, next) => {
+    try {
+      let { token } = req.body
+      if (token) {
+        verifyToken(token, async (err, decoded) => {
+          if (err) {
+            errorHandler(400, res)
+          } else {
+            const isUserExist = await crud('authentications').viewOne(decoded.user._id)
+            if (isUserExist) {
+              res.status(200).json({
+                message: 'session updated successfully',
+                status: 1,
+                token
+              })
+            } else {
+              errorHandler(401, res)
+            }
+          }
+        })
+      } else {
+        res.status(200).json({
+          message: 'session created successfully',
+          status: 0
+        })
+      }
+    } catch (error) {
+      res.status(500).json({
+        message: error,
+        status: 0
+      })
     }
   },
   signUp: async (req, res, next) => {

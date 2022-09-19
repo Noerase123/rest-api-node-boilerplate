@@ -1,7 +1,7 @@
 const { setApiCache } = require('../middleware')
 const { range } = require('./helpers')
 
-exports.listDataResponse = (model, req, res, count) => {
+exports.listDataResponse = ({ model, req, res, count }) => {
     let response = {
         count,
         results: model,

@@ -4,7 +4,7 @@ const { setCache, getCache } = require('../lib/redis')
 exports.setApiCache = async (key, value) => {
     try {
         await setCache(key, JSON.stringify(value), {
-            EX: 10
+            EX: 5
         }) 
     } catch (error) {
         console.log(error)

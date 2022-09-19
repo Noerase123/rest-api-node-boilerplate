@@ -31,13 +31,19 @@ module.exports = {
         const { _model } = req.params
         const { field, search } = req.query
         try {
+            let listView = null
+            let count = 0
             let query = {}
-            if (field && search) {
+            if (search) {
                 query[field] = search
+                const searchContent = await crud(_model).rawQueryCount(search)
+                count = searchContent[0].searchCount
+            } else {
+                listView = crud(_model).viewAll(query)
+                count = await crud(_model).count(query)
             }
-            const all = await req.paginationProcess(crud(_model).viewAll(query))
-            const count = await crud(_model).count(query)
-            const response = listDataResponse(all, req, res, count)
+            const model = search ? await crud(_model).rawQuery(search, req) : await req.paginationProcess(listView)
+            const response = listDataResponse({model, req, res, count})
             res.status(200).json(response)
         } catch (error) {
             errorHandler(500, res, error)

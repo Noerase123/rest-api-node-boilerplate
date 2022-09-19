@@ -28,7 +28,10 @@ app.use(cookieParser())
 app.use(session({
   secret: process.env.SECRET,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 24
+  }
 }))
 app.use('/api', api)
 app.use('/auth', user)

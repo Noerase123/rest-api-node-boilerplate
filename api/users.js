@@ -5,13 +5,15 @@ const {
   listUsers,
   viewUser,
   login,
+  createSession,
   updateUser,
   deleteUser
 } = require('../services/auth')
 const {
   pagination,
   getApiCache,
-  accessRole
+  accessRole,
+  authorizationGeneric
 } = require('../middleware')
 const {
   auth
@@ -22,9 +24,11 @@ router.post('/signup', signUp)
 
 router.post('/login', login)
 
+router.post('/createSession', createSession)
+
 router.post('/sso/login', auth.signInGoogle)
 
-router.get('/users', accessRole('Admin'), pagination, getApiCache, listUsers)
+router.get('/users', authorizationGeneric, pagination, getApiCache, listUsers)
 
 router.get('/users/:_id', accessRole('Admin'), getApiCache, viewUser)
 

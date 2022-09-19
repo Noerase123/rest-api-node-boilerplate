@@ -20,7 +20,9 @@ module.exports = {
     const setInfos = Object.assign({}, {
         [_field]: req.file
     })
-    const updateResult = await crud(_model).update(_id, setInfos)
+    const updateResult = await crud(_model).updateDoc({
+      trainingID: _id
+    }, setInfos)
 
     if (targetPath && updateResult) {
       fs.rename(tempPath, targetPath, err => {
