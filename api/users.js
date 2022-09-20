@@ -7,7 +7,9 @@ const {
   login,
   createSession,
   updateUser,
-  deleteUser
+  deleteUser,
+  forgotPassword,
+  resetPassword
 } = require('../services/auth')
 const {
   pagination,
@@ -25,6 +27,10 @@ router.post('/signup', signUp)
 router.post('/login', login)
 
 router.post('/createSession', createSession)
+
+router.post('/forgotPassword', forgotPassword)
+
+router.post('/resetPassword/:_id', resetPassword)
 
 router.post('/sso/login', auth.signInGoogle)
 

@@ -12,7 +12,7 @@ const generateSearch = (searchAttributes, search, options) => {
         }))
     }
     catch (err) {
-    //  
+        //
     }
 
     const aggregate = [

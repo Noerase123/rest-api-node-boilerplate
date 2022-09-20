@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose')
+const { generateSearch, generateSearchCount } = require('../../config/aggregations/searchAggregation')
 
-const user = new Schema({
+const schema = new Schema({
     firstName: {
         type: String,
         required: true
@@ -40,4 +41,33 @@ const user = new Schema({
     }
 })
 
-module.exports = model('users', user)
+const searchAttributes = [ 
+    'firstName',
+    'lastName',
+    'gender',
+    'userType'
+]
+
+schema.statics.search = {
+    default: (search, req) => {
+        const result = generateSearch(searchAttributes, search, [
+            {
+                $sort: {
+                    [req.orderBy]: req.orderAsc
+                }
+            },
+            {
+                $skip: req.limit * req.page
+            },
+            {
+                $limit: req.limit
+            }
+        ])
+        return result
+    },
+    count: (search) => {
+        return generateSearchCount(searchAttributes, search)
+    }
+}
+
+module.exports = model('users', schema)

@@ -65,6 +65,53 @@ module.exports = {
       })
     }
   },
+  forgotPassword: async (req, res, next) => {
+    try {
+      const { email } = req.body
+      const hashedPassword = await bcrypt.hashSync('password123', 10)
+      const setInfos = Object.assign({}, {
+        password: hashedPassword
+      })
+      const updateResponse = await crud('authentications').findAndUpdate({ email }, setInfos)
+      res.status(200).json({
+        message: `Password has been updated on ${email} successfully`,
+        updateResponse
+      })
+    } catch (error) {
+      errorHandler(500, res, error)
+    }
+  },
+  resetPassword: async (req, res, next) => {
+    try {
+      const { _id } = req.params
+      const { password, newPassword, confirmPassword } = req.body
+      const user = await crud('authentications').viewOne(_id)
+      const passChecker = await bcrypt.compareSync(password, user.password)
+      if (!passChecker) {
+        res.status(200).json({
+          message: 'Invalid password'
+        })
+      } else {
+        if (newPassword !== confirmPassword) {
+          res.status(200).json({
+            message: 'Invalid confirm password'
+          })
+        } else {
+          const hashedPassword = await bcrypt.hashSync(newPassword, 10)
+          const setInfos = Object.assign({}, {
+            password: hashedPassword
+          })
+          const updateUser = await crud('authentications').update(_id, setInfos)
+          res.status(200).json({
+            message: 'Password changed successfully',
+            updateUser
+          })
+        }
+      }
+    } catch (error) {
+      errorHandler(500, res, error)
+    }
+  },
   signUp: async (req, res, next) => {
     try {
       const { ...info } = req.body
@@ -94,13 +141,25 @@ module.exports = {
     }
   },
   listUsers: async (req, res, next) => {
+    const _model = 'users'
+    const { field, search } = req.query
     try {
-      const viewAll = await req.paginationProcess(crud('users').viewAll())
-      const count = await crud('users').count()
-      const response = listDataResponse(viewAll, req, res, count)
-      res.status(200).json(response)
+        let listView = null
+        let count = 0
+        let query = {}
+        if (search) {
+            query[field] = search
+            const searchContent = await crud(_model).rawQueryCount(search)
+            count = searchContent[0].searchCount
+        } else {
+            listView = crud(_model).viewAll(query)
+            count = await crud(_model).count(query)
+        }
+        const model = search ? await crud(_model).rawQuery(search, req) : await req.paginationProcess(listView)
+        const response = listDataResponse({model, req, res, count})
+        res.status(200).json(response)
     } catch (error) {
-      errorHandler(500, res, error)
+        errorHandler(500, res, error)
     }
   },
   viewUser: async (req, res, next) => {
