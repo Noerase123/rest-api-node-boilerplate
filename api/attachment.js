@@ -9,6 +9,6 @@ const {
 module.exports = (router) => {
     router.route('/document/:_model/:_id')
       .post(authorizationGeneric, uploadMultPath.single("file"), upload)
-      .get(authorizationGeneric, getFile)
+      .get(getFile)
       .delete(authorizationGeneric, deleteFile)
 }

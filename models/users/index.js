@@ -35,6 +35,10 @@ const schema = new Schema({
         type: String,
         required: true
     },
+    userRole: {
+        type: [String],
+        required: true
+    },
     _status: {
         type: String,
         default: 'active'
@@ -45,7 +49,8 @@ const searchAttributes = [
     'firstName',
     'lastName',
     'gender',
-    'userType'
+    'userType',
+    'userRole'
 ]
 
 schema.statics.search = {

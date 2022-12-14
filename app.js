@@ -12,18 +12,22 @@ connect('mongodb://localhost:27017/fitrain', {useUnifiedTopology:true, useNewUrl
 
 const api = require('./api')
 const user = require('./api/users')
+const workout = require('./api/workout')
 
 const app = express()
 
 app.set('view engine', 'jade')
-app.use('/document', express.static('./public/images'))
-app.use(helmet())
+app.use(express.static('public'))
+app.use(helmet({
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: false
+}))
 app.use(cors())
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-// app.use('/document', express.static(path.join(__dirname, 'public')));
+// app.use('/document', express.static(path.join(__dirname, 'public')))
 
 app.use(session({
   secret: process.env.SECRET,
@@ -35,6 +39,7 @@ app.use(session({
 }))
 app.use('/api', api)
 app.use('/auth', user)
+app.use('/api/workout', workout)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

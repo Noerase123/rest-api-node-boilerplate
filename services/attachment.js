@@ -16,7 +16,6 @@ module.exports = {
     const { _model, _id } = req.params
     const { _field } = req.query
     const targetPath = path.join(__dirname, `./public/images`)
-
     const setInfos = Object.assign({}, {
         [_field]: req.file
     })

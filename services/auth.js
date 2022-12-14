@@ -23,6 +23,8 @@ module.exports = {
           res.status(200).json({
             message: 'User Login successfully',
             status: 1,
+            userID: user[0].userID,
+            info: user[0],
             token
           })
         }
@@ -123,6 +125,7 @@ module.exports = {
         }
         const authRegister = await crud('authentications').create({
           ...info,
+          userID: userRegister._id,
           password: hashedPassword
         })
         if (authRegister) {

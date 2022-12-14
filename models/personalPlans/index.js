@@ -7,11 +7,11 @@ const schema = new Schema({
         required: true
     },
     trainingType: {
-        type: String,
+        type: [String],
         required: true
     },
-    training: {
-        type: 'ObjectId',
+    trainings: {
+        type: ['ObjectId'],
         ref: 'trainings',
         required: true
     },
@@ -24,10 +24,6 @@ const schema = new Schema({
         required: true,
         enum: ['Morning', 'Evening'],
         default: 'Morning'
-    },
-    muscleType: {
-        type: [String],
-        required: true
     },
     planCreated: {
         type: Date
