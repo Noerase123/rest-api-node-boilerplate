@@ -38,6 +38,10 @@ const schema = new Schema({
           }
         }
     },
+    userID: {
+        type: 'ObjectId',
+        required: true
+    },
     userRole: {
         type: [String],
         require: true

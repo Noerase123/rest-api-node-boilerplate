@@ -36,10 +36,10 @@ router.post('/sso/login', auth.signInGoogle)
 
 router.get('/users', authorizationGeneric, pagination, getApiCache, listUsers)
 
-router.get('/users/:_id', accessRole('Admin'), getApiCache, viewUser)
+router.get('/users/:_id', authorizationGeneric, getApiCache, viewUser)
 
-router.patch('/update/:_id', accessRole('Admin'), updateUser)
+router.patch('/update/:_id', authorizationGeneric, updateUser)
 
-router.delete('/delete/:_id', accessRole('Admin'), deleteUser)
+router.delete('/delete/:_id', authorizationGeneric, deleteUser)
 
 module.exports = router

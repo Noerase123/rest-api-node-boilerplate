@@ -13,6 +13,11 @@ const schema = new Schema({
     },
     type: {
         type: String,
+        enum: [
+            'Build Muscle',
+            'Lose Weight',
+            'Stamina'
+        ],
         required: true
     },
     muscleFocus: {
